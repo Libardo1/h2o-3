@@ -1169,6 +1169,8 @@ public class NewChunk extends Chunk {
     boolean floatOverflow = false;
     double min = Double.POSITIVE_INFINITY;
     double max = Double.NEGATIVE_INFINITY;
+    double longMax = (double) Long.MAX_VALUE;
+    double longMin = (double) Long.MIN_VALUE;
     BigInteger MAX = BigInteger.valueOf(Long.MAX_VALUE);
     BigInteger MIN = BigInteger.valueOf(Long.MIN_VALUE);
     BigInteger min_l = MAX.multiply(MAX);
@@ -1195,7 +1197,7 @@ public class NewChunk extends Chunk {
       }
 
       if (isInteger)
-        isInteger = (x >= 0) && (d <= Long.MAX_VALUE) && (d >= Long.MIN_VALUE);  // check for integer
+        isInteger = (x >= 0) && (d <= longMax) && (d >= longMin);  // check for integer
 
       if ((x >=0) && ((long)d != ll.longValue()) && isInteger)  { // use long if integer and fit inside long format
         if( ll.compareTo(min_l)==-1 ) { min=d; min_l=ll; llo=l; xlo=x; } //
