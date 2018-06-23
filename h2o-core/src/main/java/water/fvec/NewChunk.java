@@ -1177,7 +1177,7 @@ public class NewChunk extends Chunk {
     long llo=Long   .MAX_VALUE, lhi=Long   .MIN_VALUE;
     int  xlo=Integer.MAX_VALUE, xhi=Integer.MIN_VALUE;
     boolean hasZero = sparse;
-    isInteger = (_ds==null &&_xs._vals1==null && _xs._vals4==null) || (_ds!=null && isInteger);  // null for integers/longs/binary
+   // isInteger = (_ds==null &&_xs._vals1==null && _xs._vals4==null) || (_ds!=null && isInteger);  // null for integers/longs/binary
     for(int i = 0; i< _sparseLen; i++ ) {
       if( isNA2(i) ) continue;
       long l = _ms.get(i);
@@ -1193,6 +1193,9 @@ public class NewChunk extends Chunk {
         hasZero = true;
         continue;
       }
+
+      if (isInteger)
+        isInteger = (x >= 0) && (d <= Long.MAX_VALUE) && (d >= Long.MIN_VALUE);  // check for integer
 
       if ((x >=0) && ((long)d != ll.longValue()) && isInteger)  { // use long if integer and fit inside long format
         if( ll.compareTo(min_l)==-1 ) { min=d; min_l=ll; llo=l; xlo=x; } //
