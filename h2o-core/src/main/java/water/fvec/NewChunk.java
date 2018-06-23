@@ -1167,7 +1167,6 @@ public class NewChunk extends Chunk {
     // See if we can sanely normalize all the data to the same fixed-point.
     int  xmin = Integer.MAX_VALUE;   // min exponent found
     boolean floatOverflow = false;
-    boolean fitLong = true;
     double min = Double.POSITIVE_INFINITY;
     double max = Double.NEGATIVE_INFINITY;
     BigInteger MAX = BigInteger.valueOf(Long.MAX_VALUE);
@@ -1178,6 +1177,7 @@ public class NewChunk extends Chunk {
     long llo=Long   .MAX_VALUE, lhi=Long   .MIN_VALUE;
     int  xlo=Integer.MAX_VALUE, xhi=Integer.MIN_VALUE;
     boolean hasZero = sparse;
+    boolean fitLong = (_ds==null &&_xs._vals1==null && _xs._vals4==null) || (_ds!=null && isInteger);  // null for integers/longs/binary
     for(int i = 0; i< _sparseLen; i++ ) {
       if( isNA2(i) ) continue;
       long l = _ms.get(i);
@@ -1193,8 +1193,6 @@ public class NewChunk extends Chunk {
         hasZero = true;
         continue;
       }
-      if (fitLong)  // once set to false don't want to reset back to true
-        fitLong = ll.compareTo(MAX)<=0 && ll.compareTo(MIN)>=0;
 
       if ((x >=0) && ((long)d != ll.longValue()) && fitLong)  { // use long if integer and fit inside long format
         if( ll.compareTo(min_l)==-1 ) { min=d; min_l=ll; llo=l; xlo=x; } //
