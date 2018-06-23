@@ -1177,7 +1177,7 @@ public class NewChunk extends Chunk {
     long llo=Long   .MAX_VALUE, lhi=Long   .MIN_VALUE;
     int  xlo=Integer.MAX_VALUE, xhi=Integer.MIN_VALUE;
     boolean hasZero = sparse;
-    boolean fitLong = (_ds==null &&_xs._vals1==null && _xs._vals4==null) || (_ds!=null && isInteger);  // null for integers/longs/binary
+    isInteger = (_ds==null &&_xs._vals1==null && _xs._vals4==null) || (_ds!=null && isInteger);  // null for integers/longs/binary
     for(int i = 0; i< _sparseLen; i++ ) {
       if( isNA2(i) ) continue;
       long l = _ms.get(i);
@@ -1194,7 +1194,7 @@ public class NewChunk extends Chunk {
         continue;
       }
 
-      if ((x >=0) && ((long)d != ll.longValue()) && fitLong)  { // use long if integer and fit inside long format
+      if ((x >=0) && ((long)d != ll.longValue()) && isInteger)  { // use long if integer and fit inside long format
         if( ll.compareTo(min_l)==-1 ) { min=d; min_l=ll; llo=l; xlo=x; } //
         if( ll.compareTo(max_l)== 1 ) { max=d; max_l=ll; lhi=l; xhi=x; }
       } else {
@@ -1225,10 +1225,10 @@ public class NewChunk extends Chunk {
     if(!hasNonZero) xlo = xhi = xmin = 0;
 
     // Constant column?
-    if( _naCnt==0 && (min_l.compareTo(max_l)==0) && xmin >=0 && fitLong) {
+    if( _naCnt==0 && (min_l.compareTo(max_l)==0) && xmin >=0 && isInteger) {
       return new C0LChunk(min_l.longValue(), _len);
     }
-    if( _naCnt==0 && (min==max) && (xmin<0 || !fitLong) ) {
+    if( _naCnt==0 && (min==max) && (xmin<0 || !isInteger) ) {
       return new C0DChunk(min, _len);
     }
     // Compute min & max, as scaled integers in the xmin scale.
